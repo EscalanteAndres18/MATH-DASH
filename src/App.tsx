@@ -197,7 +197,7 @@ const Numpad = ({
   const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
   
   return (
-    <div className="grid grid-cols-3 gap-2 w-full max-w-[280px] mt-4">
+    <div className="grid grid-cols-3 gap-1 md:gap-2 w-full max-w-[200px] md:max-w-[280px] mt-4">
       {keys.map((key) => (
         <motion.button
           key={key}
@@ -206,7 +206,7 @@ const Numpad = ({
             SoundService.playClick();
             onPress(key);
           }}
-          className="h-16 rounded-2xl bg-white/20 backdrop-blur-md text-white font-black text-2xl flex items-center justify-center border-b-8 border-black/20 hover:bg-white/30 transition-colors"
+          className="h-10 md:h-16 rounded-xl md:rounded-2xl bg-white/20 backdrop-blur-md text-white font-black text-xl md:text-2xl flex items-center justify-center border-b-4 md:border-b-8 border-black/20 hover:bg-white/30 transition-colors"
         >
           {key}
         </motion.button>
@@ -217,9 +217,9 @@ const Numpad = ({
             SoundService.playClick();
             onDelete();
         }}
-        className="h-16 rounded-2xl bg-red-500/60 backdrop-blur-md text-white font-bold text-2xl flex items-center justify-center border-b-8 border-black/20"
+        className="h-10 md:h-16 rounded-xl md:rounded-2xl bg-red-500/60 backdrop-blur-md text-white font-bold text-xl md:text-2xl flex items-center justify-center border-b-4 md:border-b-8 border-black/20"
       >
-        <Delete size={28} />
+        <Delete size={20} md:size={28} />
       </motion.button>
       <motion.button
         whileTap={{ scale: 0.9 }}
@@ -228,17 +228,17 @@ const Numpad = ({
             // but for UI consistency let's play click here too or just let handleConfirm play its own
             onConfirm();
         }}
-        className="h-16 rounded-2xl bg-green-500/60 backdrop-blur-md text-white font-bold text-2xl flex items-center justify-center border-b-8 border-black/20"
+        className="h-10 md:h-16 rounded-xl md:rounded-2xl bg-green-500/60 backdrop-blur-md text-white font-bold text-xl md:text-2xl flex items-center justify-center border-b-4 md:border-b-8 border-black/20"
       >
-        <Check size={28} />
+        <Check size={20} md:size={28} />
       </motion.button>
     </div>
   );
 };
 
 const RaceTrack = ({ players, playerCount, targetScore }: { players: PlayerState[], playerCount: number, targetScore: number }) => (
-  <div className="absolute top-0 left-0 right-0 h-24 bg-black/40 backdrop-blur-xl border-b border-white/10 z-[100] flex items-center px-8 overflow-hidden">
-      <div className="relative w-full h-12 bg-white/5 rounded-full flex items-center px-4">
+  <div className="absolute top-0 left-0 right-0 h-16 md:h-24 bg-black/40 backdrop-blur-xl border-b border-white/10 z-[100] flex items-center px-4 md:px-8 overflow-hidden supports-[padding:env(safe-area-inset-top)]:pt-[env(safe-area-inset-top)] supports-[padding:env(safe-area-inset-top)]:pl-[env(safe-area-inset-left)] supports-[padding:env(safe-area-inset-top)]:pr-[env(safe-area-inset-right)]">
+      <div className="relative w-full h-8 md:h-12 bg-white/5 rounded-full flex items-center px-4">
           <div className="absolute right-12 top-2 bottom-2 w-1 bg-yellow-400/50 dashed" />
           <Trophy size={24} className="absolute right-4 text-yellow-400 animate-pulse" />
           
@@ -505,24 +505,24 @@ export default function App() {
 
   if (gameStatus === 'SETUP') {
     return (
-      <div className="min-h-screen bg-[#070b14] flex items-center justify-center p-6 font-sans">
+      <div className="min-h-[100dvh] bg-[#070b14] flex items-center justify-center p-2 md:p-6 font-sans supports-[padding:env(safe-area-inset-top)]:pl-[env(safe-area-inset-left)] supports-[padding:env(safe-area-inset-top)]:pr-[env(safe-area-inset-right)] supports-[padding:env(safe-area-inset-top)]:pb-[env(safe-area-inset-bottom)]">
         <motion.div 
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="bg-white rounded-[60px] p-12 w-full max-w-5xl shadow-[0_40px_100px_-20px_rgba(0,0,0,0.6)] relative overflow-hidden"
+          className="bg-white rounded-[32px] md:rounded-[60px] p-6 md:p-12 w-full max-w-5xl shadow-[0_40px_100px_-20px_rgba(0,0,0,0.6)] relative overflow-hidden max-h-[95dvh] overflow-y-auto custom-scrollbar"
         >
           <div className="absolute -top-20 -right-20 w-64 h-64 bg-indigo-100 rounded-full blur-3xl opacity-50" />
           <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-yellow-100 rounded-full blur-3xl opacity-50" />
 
           <div className="relative z-10">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
-                <div className="flex items-center gap-6">
-                    <div className="p-6 bg-yellow-400 rounded-3xl shadow-xl rotate-6 animate-bounce">
-                        <Play className="text-white" size={48} fill="currentColor" />
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 md:mb-12">
+                <div className="flex items-center gap-4 md:gap-6">
+                    <div className="p-4 md:p-6 bg-yellow-400 rounded-2xl md:rounded-3xl shadow-xl rotate-6 animate-bounce">
+                        <Play className="text-white" size={32} md:size={48} fill="currentColor" />
                     </div>
                     <div>
-                        <h1 className="text-6xl font-black text-indigo-950 tracking-tight leading-none mb-2">{t.title}</h1>
-                        <p className="text-indigo-400 font-bold tracking-[0.4em] uppercase text-sm">{t.subtitle}</p>
+                        <h1 className="text-3xl md:text-6xl font-black text-indigo-950 tracking-tight leading-none mb-1 md:mb-2">{t.title}</h1>
+                        <p className="text-indigo-400 font-bold tracking-[0.2em] md:tracking-[0.4em] uppercase text-[10px] md:text-sm">{t.subtitle}</p>
                     </div>
                 </div>
                 <div className="flex flex-col items-end gap-2">
@@ -563,12 +563,12 @@ export default function App() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-              <div className="space-y-10">
+              <div className="space-y-6 md:space-y-10">
                 <section>
-                  <label className="text-sm font-black text-indigo-300 uppercase tracking-[0.2em] flex items-center gap-2 mb-6">
-                    <Users size={18} /> {t.players}
+                  <label className="text-[10px] md:text-sm font-black text-indigo-300 uppercase tracking-[0.2em] flex items-center gap-2 mb-3 md:mb-6">
+                    <Users size={14} md:size={18} /> {t.players}
                   </label>
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-3 gap-2 md:gap-4">
                     {[1, 2, 3].map(n => (
                       <button
                         key={n}
@@ -582,7 +582,7 @@ export default function App() {
                                   : [...prev.playerInputDevices, ...Array(n - prev.playerInputDevices.length).fill({ type: 'screen' })]
                           }));
                         }}
-                        className={`h-20 rounded-[28px] border-b-8 text-3xl font-black transition-all ${
+                        className={`h-12 md:h-20 rounded-2xl md:rounded-[28px] border-b-4 md:border-b-8 text-xl md:text-3xl font-black transition-all ${
                           config.playerCount === n 
                             ? 'bg-indigo-600 text-white border-indigo-800 scale-105 shadow-2xl' 
                             : 'bg-indigo-50 text-indigo-600 border-indigo-200 hover:bg-indigo-100'
@@ -595,15 +595,15 @@ export default function App() {
                 </section>
 
                 <section>
-                  <label className="text-sm font-black text-indigo-300 uppercase tracking-[0.2em] flex items-center gap-2 mb-6">
-                    <Plus size={18} /> {t.operations}
+                  <label className="text-[10px] md:text-sm font-black text-indigo-300 uppercase tracking-[0.2em] flex items-center gap-2 mb-3 md:mb-6">
+                    <Plus size={14} md:size={18} /> {t.operations}
                   </label>
-                  <div className="flex flex-wrap gap-4">
+                  <div className="flex flex-wrap gap-2 md:gap-4">
                     {[
-                      { value: 'addition', icon: <Plus size={24} />, label: t.sums },
-                      { value: 'subtraction', icon: <Minus size={24} />, label: t.minus },
-                      { value: 'multiplication', icon: <X size={24} />, label: t.multi },
-                      { value: 'division', icon: <Divide size={24} />, label: t.divide }
+                      { value: 'addition', icon: <Plus size={18} md:size={24} />, label: t.sums },
+                      { value: 'subtraction', icon: <Minus size={18} md:size={24} />, label: t.minus },
+                      { value: 'multiplication', icon: <X size={18} md:size={24} />, label: t.multi },
+                      { value: 'division', icon: <Divide size={18} md:size={24} />, label: t.divide }
                     ].map(op => (
                       <button
                         key={op.value}
@@ -616,7 +616,7 @@ export default function App() {
                             setConfig(prev => ({ ...prev, operations: [...prev.operations, op.value as Operation] }));
                           }
                         }}
-                        className={`flex items-center gap-3 px-8 py-5 rounded-3xl border-b-8 text-xl font-black transition-all ${
+                        className={`flex items-center gap-2 md:gap-3 px-4 md:px-8 py-3 md:py-5 rounded-2xl md:rounded-3xl border-b-4 md:border-b-8 text-sm md:text-xl font-black transition-all ${
                           config.operations.includes(op.value as Operation)
                             ? 'bg-emerald-500 text-white border-emerald-700 scale-105 shadow-lg'
                             : 'bg-indigo-50 text-indigo-600 border-indigo-200 hover:bg-indigo-100'
@@ -754,9 +754,9 @@ export default function App() {
                 SoundService.playClick();
                 startGame();
               }}
-              className="w-full bg-yellow-400 hover:bg-yellow-500 text-indigo-950 text-4xl font-black py-8 rounded-[40px] shadow-[0_12px_0_#ca8a04] hover:shadow-[0_6px_0_#ca8a04] hover:translate-y-1 transition-all flex items-center justify-center gap-6 mt-12 group uppercase"
+              className="w-full bg-yellow-400 hover:bg-yellow-500 text-indigo-950 text-2xl md:text-4xl font-black py-4 md:py-8 rounded-2xl md:rounded-[40px] shadow-[0_8px_0_#ca8a04] md:shadow-[0_12px_0_#ca8a04] hover:shadow-[0_4px_0_#ca8a04] md:hover:shadow-[0_6px_0_#ca8a04] hover:translate-y-1 transition-all flex items-center justify-center gap-4 md:gap-6 mt-6 md:mt-12 group uppercase"
             >
-              <Play size={48} fill="currentColor" className="group-hover:scale-110 transition-transform" /> {t.startRace}
+              <Play size={32} md:size={48} fill="currentColor" className="group-hover:scale-110 transition-transform" /> {t.startRace}
             </button>
           </div>
         </motion.div>
@@ -766,7 +766,7 @@ export default function App() {
 
   if (gameStatus === 'WINNER') {
     return (
-      <div className={`min-h-screen ${winner?.color} flex flex-col items-center justify-center p-6 text-white overflow-hidden`}>
+      <div className={`min-h-[100dvh] ${winner?.color} flex flex-col items-center justify-center p-4 md:p-6 text-white overflow-hidden supports-[padding:env(safe-area-inset-top)]:pl-[env(safe-area-inset-left)] supports-[padding:env(safe-area-inset-top)]:pr-[env(safe-area-inset-right)] supports-[padding:env(safe-area-inset-top)]:pb-[env(safe-area-inset-bottom)]`}>
         <motion.div
            initial={{ scale: 0, rotate: -10 }}
            animate={{ scale: 1, rotate: 0 }}
@@ -783,12 +783,12 @@ export default function App() {
           </motion.div>
         </motion.div>
 
-        <div className="text-center mt-12 bg-black/20 p-12 rounded-[60px] backdrop-blur-md">
-            <span className="text-8xl">{winner?.character}</span>
-            <h2 className="text-7xl font-black mt-4 mb-2 tracking-tight drop-shadow-lg uppercase">
+        <div className="text-center mt-4 md:mt-12 bg-black/20 p-6 md:p-12 rounded-[32px] md:rounded-[60px] backdrop-blur-md">
+            <span className="text-6xl md:text-8xl">{winner?.character}</span>
+            <h2 className="text-4xl md:text-7xl font-black mt-2 md:mt-4 mb-1 md:mb-2 tracking-tight drop-shadow-lg uppercase">
                 {t.winner} {((winner?.id ?? 0) + 1)}
             </h2>
-            <p className="text-2xl font-black opacity-80 uppercase tracking-[0.3em]">{t.champion}</p>
+            <p className="text-xl md:text-2xl font-black opacity-80 uppercase tracking-[0.1em] md:tracking-[0.3em]">{t.champion}</p>
         </div>
 
         <div className="flex flex-col md:flex-row gap-6 mt-8">
@@ -828,7 +828,7 @@ export default function App() {
   }
 
   return (
-    <div className="h-screen flex flex-row bg-indigo-950 overflow-hidden relative pt-24 pb-8">
+    <div className="h-[100dvh] w-full flex flex-row bg-indigo-950 overflow-hidden relative pt-16 md:pt-24 pb-4 md:pb-8 supports-[padding:env(safe-area-inset-top)]:pl-[env(safe-area-inset-left)] supports-[padding:env(safe-area-inset-top)]:pr-[env(safe-area-inset-right)] supports-[padding:env(safe-area-inset-top)]:pb-[env(safe-area-inset-bottom)]">
       <RaceTrack players={players} playerCount={config.playerCount} targetScore={config.targetScore} />
 
       <AnimatePresence>
@@ -849,9 +849,9 @@ export default function App() {
             SoundService.playClick();
             setGameStatus('PAUSED');
         }}
-        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[150] bg-white/20 hover:bg-white/30 backdrop-blur-xl p-6 rounded-full text-white shadow-2xl border border-white/20 transition-all hover:scale-110 group"
+        className="fixed bottom-2 md:bottom-6 left-1/2 -translate-x-1/2 z-[150] bg-white/20 hover:bg-white/30 backdrop-blur-xl p-3 md:p-6 rounded-full text-white shadow-2xl border border-white/20 transition-all hover:scale-110 group"
       >
-        <Pause size={32} fill="currentColor" className="group-hover:animate-pulse" />
+        <Pause size={24} md:size={32} fill="currentColor" className="group-hover:animate-pulse" />
       </button>
 
       {players.map((player) => {
@@ -867,18 +867,18 @@ export default function App() {
               ${player.id < config.playerCount - 1 ? 'border-r border-indigo-900/20' : ''}
             `}
           >
-            <div className="absolute top-6 left-6 flex items-center gap-4 z-10">
-              <div className="bg-black/30 backdrop-blur-xl px-6 py-3 rounded-full flex items-center gap-3 border border-white/10">
-                <span className="text-4xl">{player.character}</span>
-                <span className="text-white font-black text-2xl tracking-tighter uppercase">{t.winner} {player.id + 1}</span>
+            <div className="absolute top-4 left-4 flex items-center gap-2 md:gap-4 z-10">
+              <div className="bg-black/30 backdrop-blur-xl px-4 md:px-6 py-2 md:py-3 rounded-full flex items-center gap-2 md:gap-3 border border-white/10">
+                <span className="text-xl md:text-4xl">{player.character}</span>
+                <span className="text-white font-black text-sm md:text-2xl tracking-tighter uppercase">{t.winner} {player.id + 1}</span>
               </div>
-              <div className="bg-black/30 backdrop-blur-xl px-6 py-3 rounded-full flex items-center gap-3 border border-white/10">
-                <Trophy size={28} className="text-yellow-400" />
-                <span className="text-white font-black text-2xl tracking-tighter">{player.score} <span className="text-white/40 text-sm">/ {config.targetScore}</span></span>
+              <div className="bg-black/30 backdrop-blur-xl px-4 md:px-6 py-2 md:py-3 rounded-full flex items-center gap-2 md:gap-3 border border-white/10">
+                <Trophy size={18} md:size={28} className="text-yellow-400" />
+                <span className="text-white font-black text-sm md:text-2xl tracking-tighter">{player.score} <span className="text-white/40 text-[10px] md:text-sm">/ {config.targetScore}</span></span>
               </div>
             </div>
 
-            <div className="flex-1 flex flex-col items-center justify-center p-12">
+            <div className="flex-1 flex flex-col items-center justify-center p-4 md:p-12 overflow-y-auto">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={player.currentProblem.id}
@@ -887,16 +887,16 @@ export default function App() {
                   exit={{ y: -40, opacity: 0, scale: 1.1 }}
                   className="text-center w-full max-w-lg"
                 >
-                  <div className="text-8xl md:text-[120px] font-black text-white tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.4)] mb-12 leading-none">
+                  <div className="text-6xl md:text-[120px] font-black text-white tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.4)] mb-4 md:mb-12 leading-none">
                     {player.currentProblem.question}
                   </div>
                   
                   <motion.div 
                     animate={isWrong ? { x: [-15, 15, -15, 15, 0] } : (isCorrect ? { scale: [1, 1.3, 1] } : {})}
                     className={`
-                        w-full h-32 bg-white rounded-[40px] flex items-center justify-center p-4 shadow-2xl border-b-[12px] border-black/10 transition-all cursor-pointer relative
+                        w-full h-20 md:h-32 bg-white rounded-[24px] md:rounded-[40px] flex items-center justify-center p-4 shadow-2xl border-b-[8px] md:border-b-[12px] border-black/10 transition-all cursor-pointer relative
                         ${isCorrect ? 'bg-emerald-100 text-emerald-600' : isWrong ? 'bg-rose-100 text-rose-600' : 'text-indigo-950'}
-                        ${player.inputDevice.type !== 'screen' ? 'ring-8 ring-white/40 scale-[1.02] -translate-y-1' : ''}
+                        ${player.inputDevice.type !== 'screen' ? 'ring-4 md:ring-8 ring-white/40 scale-[1.02] -translate-y-1' : ''}
                     `}
                   >
                     <div className="flex items-center justify-center relative">
@@ -915,12 +915,12 @@ export default function App() {
                     onConfirm={() => handleConfirm(player.id)}
                 />
               ) : (
-                <div className="mt-12 flex flex-col items-center">
-                    <div className="bg-black/30 backdrop-blur-md p-10 rounded-[40px] border-2 border-white/20 shadow-2xl">
+                <div className="mt-4 md:mt-12 flex flex-col items-center">
+                    <div className="bg-black/30 backdrop-blur-md p-6 md:p-10 rounded-[24px] md:rounded-[40px] border-2 border-white/20 shadow-2xl">
                         <div className="flex gap-4">
-                             <Keyboard size={48} className="text-white/40" />
+                             <Keyboard size={32} className="md:w-12 md:h-12 text-white/40" />
                              <div className="flex flex-col">
-                                <span className="text-white/40 font-black text-2xl uppercase tracking-widest leading-none">Ready</span>
+                                <span className="text-white/40 font-black text-xl md:text-2xl uppercase tracking-widest leading-none">Ready</span>
                                 <span className="text-white/20 font-bold text-xs uppercase tracking-widest mt-1">
                                     {(player.inputDevice as any).name || 'Universal Keyboard'}
                                 </span>
