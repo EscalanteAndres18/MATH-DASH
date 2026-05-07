@@ -260,7 +260,7 @@ const RaceTrack = ({ players, playerCount, targetScore }: { players: PlayerState
   </div>
 );
 
-const PauseMenu = ({ t, language, onResume, onMainMenu }: { t: any, language: Language, onResume: () => void, onMainMenu: () => void }) => (
+const PauseMenu = ({ t, language, isFullscreen, onResume, onMainMenu, toggleFullscreen }: { t: any, language: Language, isFullscreen: boolean, onResume: () => void, onMainMenu: () => void, toggleFullscreen: () => void }) => (
   <motion.div 
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
@@ -290,17 +290,13 @@ const PauseMenu = ({ t, language, onResume, onMainMenu }: { t: any, language: La
           <button
               onClick={() => {
                 SoundService.playClick();
-                if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen();
-                } else {
-                    document.exitFullscreen();
-                }
+                toggleFullscreen();
               }}
               className="bg-indigo-500 text-white p-8 rounded-[40px] font-black text-3xl shadow-2xl hover:scale-105 transition-all flex flex-col items-center justify-center gap-4 uppercase text-center"
           >
-              {document.fullscreenElement ? <Minimize size={48} /> : <Maximize size={48} />}
+              {isFullscreen ? <Minimize size={48} /> : <Maximize size={48} />}
               <span className="text-lg">
-                {document.fullscreenElement ? translations[language].exitFullScreen : translations[language].fullScreen}
+                {isFullscreen ? translations[language].exitFullScreen : translations[language].fullScreen}
               </span>
           </button>
       </div>
@@ -314,25 +310,51 @@ export default function App() {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch((e) => {
-        console.error(`Error attempting to enable full-screen mode: ${e.message} (${e.name})`);
-      });
+    const doc = document.documentElement as any;
+    const docExit = document as any;
+
+    if (!document.fullscreenElement && !docExit.webkitFullscreenElement && !docExit.mozFullScreenElement && !docExit.msFullscreenElement) {
+      const request = doc.requestFullscreen || doc.webkitRequestFullscreen || doc.mozRequestFullScreen || doc.msRequestFullscreen;
+      if (request) {
+        request.call(doc).catch((err: any) => {
+          console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+        });
+      }
     } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
+      const exit = docExit.exitFullscreen || docExit.webkitExitFullscreen || docExit.mozCancelFullScreen || docExit.msExitFullscreen;
+      if (exit) {
+        exit.call(docExit);
       }
     }
   };
 
   useEffect(() => {
     const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      const d = document as any;
+      setIsFullscreen(!!(d.fullscreenElement || d.webkitFullscreenElement || d.mozFullScreenElement || d.msFullscreenElement));
     };
 
     document.addEventListener('fullscreenchange', handleFullscreenChange);
-    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
+    };
   }, []);
+
+  useEffect(() => {
+    const screenObj = window.screen as any;
+    if (isFullscreen && screenObj?.orientation?.lock) {
+      screenObj.orientation.lock('landscape').catch(() => {
+        // Ignore orientation lock errors
+      });
+    }
+  }, [isFullscreen]);
 
   const [gameStatus, setGameStatus] = useState<'SETUP' | 'PLAYING' | 'PAUSED' | 'WINNER'>('SETUP');
   const [config, setConfig] = useState<GameConfig>({
@@ -814,8 +836,10 @@ export default function App() {
           <PauseMenu 
             t={t}
             language={language}
+            isFullscreen={isFullscreen}
             onResume={() => setGameStatus('PLAYING')} 
             onMainMenu={() => setGameStatus('SETUP')} 
+            toggleFullscreen={toggleFullscreen}
           />
         )}
       </AnimatePresence>
