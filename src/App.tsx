@@ -237,8 +237,8 @@ const Numpad = ({
 };
 
 const RaceTrack = ({ players, playerCount, targetScore }: { players: PlayerState[], playerCount: number, targetScore: number }) => (
-  <div className="absolute top-0 left-0 right-0 h-16 md:h-24 bg-black/40 backdrop-blur-xl border-b border-white/10 z-[100] flex items-center px-4 md:px-8 overflow-hidden supports-[padding:env(safe-area-inset-top)]:pt-[env(safe-area-inset-top)] supports-[padding:env(safe-area-inset-top)]:pl-[env(safe-area-inset-left)] supports-[padding:env(safe-area-inset-top)]:pr-[env(safe-area-inset-right)]">
-      <div className="relative w-full h-8 md:h-12 bg-white/5 rounded-full flex items-center px-4">
+  <div className="absolute top-0 left-0 right-0 h-14 md:h-24 bg-black/40 backdrop-blur-xl border-b border-white/10 z-[100] flex items-center px-4 md:px-8 overflow-hidden supports-[padding:env(safe-area-inset-top)]:pt-[env(safe-area-inset-top)] supports-[padding:env(safe-area-inset-top)]:pl-[env(safe-area-inset-left)] supports-[padding:env(safe-area-inset-top)]:pr-[env(safe-area-inset-right)]">
+      <div className="relative w-full h-7 md:h-12 bg-white/5 rounded-full flex items-center px-4">
           <div className="absolute right-12 top-2 bottom-2 w-1 bg-yellow-400/50 dashed" />
           <Trophy size={24} className="absolute right-4 text-yellow-400 animate-pulse" />
           
@@ -346,15 +346,6 @@ export default function App() {
       document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
     };
   }, []);
-
-  useEffect(() => {
-    const screenObj = window.screen as any;
-    if (isFullscreen && screenObj?.orientation?.lock) {
-      screenObj.orientation.lock('landscape').catch(() => {
-        // Ignore orientation lock errors
-      });
-    }
-  }, [isFullscreen]);
 
   const [gameStatus, setGameStatus] = useState<'SETUP' | 'PLAYING' | 'PAUSED' | 'WINNER'>('SETUP');
   const [config, setConfig] = useState<GameConfig>({
@@ -828,7 +819,7 @@ export default function App() {
   }
 
   return (
-    <div className="h-[100dvh] w-full flex flex-row bg-indigo-950 overflow-hidden relative pt-16 md:pt-24 pb-4 md:pb-8 supports-[padding:env(safe-area-inset-top)]:pl-[env(safe-area-inset-left)] supports-[padding:env(safe-area-inset-top)]:pr-[env(safe-area-inset-right)] supports-[padding:env(safe-area-inset-top)]:pb-[env(safe-area-inset-bottom)]">
+    <div className="h-[100dvh] w-full flex flex-row bg-indigo-950 overflow-hidden relative pt-14 md:pt-24 pb-2 md:pb-8 supports-[padding:env(safe-area-inset-top)]:pl-[env(safe-area-inset-left)] supports-[padding:env(safe-area-inset-top)]:pr-[env(safe-area-inset-right)] supports-[padding:env(safe-area-inset-top)]:pb-[env(safe-area-inset-bottom)]">
       <RaceTrack players={players} playerCount={config.playerCount} targetScore={config.targetScore} />
 
       <AnimatePresence>
@@ -867,14 +858,14 @@ export default function App() {
               ${player.id < config.playerCount - 1 ? 'border-r border-indigo-900/20' : ''}
             `}
           >
-            <div className="absolute top-4 left-4 flex items-center gap-2 md:gap-4 z-10">
-              <div className="bg-black/30 backdrop-blur-xl px-4 md:px-6 py-2 md:py-3 rounded-full flex items-center gap-2 md:gap-3 border border-white/10">
-                <span className="text-xl md:text-4xl">{player.character}</span>
-                <span className="text-white font-black text-sm md:text-2xl tracking-tighter uppercase">{t.winner} {player.id + 1}</span>
+            <div className="absolute top-2 md:top-4 left-2 md:left-4 flex items-center gap-1 md:gap-4 z-10">
+              <div className="bg-black/30 backdrop-blur-xl px-2 md:px-6 py-1 md:py-3 rounded-full flex items-center gap-1 md:gap-3 border border-white/10">
+                <span className="text-lg md:text-4xl">{player.character}</span>
+                <span className="text-white font-black text-[10px] md:text-2xl tracking-tighter uppercase">{t.winner} {player.id + 1}</span>
               </div>
-              <div className="bg-black/30 backdrop-blur-xl px-4 md:px-6 py-2 md:py-3 rounded-full flex items-center gap-2 md:gap-3 border border-white/10">
-                <Trophy size={18} md:size={28} className="text-yellow-400" />
-                <span className="text-white font-black text-sm md:text-2xl tracking-tighter">{player.score} <span className="text-white/40 text-[10px] md:text-sm">/ {config.targetScore}</span></span>
+              <div className="bg-black/30 backdrop-blur-xl px-2 md:px-6 py-1 md:py-3 rounded-full flex items-center gap-1 md:gap-3 border border-white/10">
+                <Trophy size={14} md:size={28} className="text-yellow-400" />
+                <span className="text-white font-black text-[10px] md:text-2xl tracking-tighter">{player.score} <span className="text-white/40 text-[8px] md:text-sm">/ {config.targetScore}</span></span>
               </div>
             </div>
 
@@ -887,7 +878,7 @@ export default function App() {
                   exit={{ y: -40, opacity: 0, scale: 1.1 }}
                   className="text-center w-full max-w-lg"
                 >
-                  <div className="text-6xl md:text-[120px] font-black text-white tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.4)] mb-4 md:mb-12 leading-none">
+                  <div className="text-5xl md:text-[120px] font-black text-white tracking-tighter drop-shadow-[0_10px_20px_rgba(0,0,0,0.4)] mb-2 md:mb-12 leading-none">
                     {player.currentProblem.question}
                   </div>
                   
@@ -915,8 +906,8 @@ export default function App() {
                     onConfirm={() => handleConfirm(player.id)}
                 />
               ) : (
-                <div className="mt-4 md:mt-12 flex flex-col items-center">
-                    <div className="bg-black/30 backdrop-blur-md p-6 md:p-10 rounded-[24px] md:rounded-[40px] border-2 border-white/20 shadow-2xl">
+                <div className="mt-2 md:mt-12 flex flex-col items-center">
+                    <div className="bg-black/30 backdrop-blur-md p-4 md:p-10 rounded-[20px] md:rounded-[40px] border-2 border-white/20 shadow-2xl">
                         <div className="flex gap-4">
                              <Keyboard size={32} className="md:w-12 md:h-12 text-white/40" />
                              <div className="flex flex-col">
