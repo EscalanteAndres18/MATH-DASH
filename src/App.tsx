@@ -20,7 +20,9 @@ import {
   ChevronRight,
   ChevronLeft,
   CircleStop,
-  Globe
+  Globe,
+  Maximize,
+  Minimize
 } from 'lucide-react';
 import { SoundService } from './services/soundService';
 import { Language, translations } from './i18n';
@@ -258,21 +260,21 @@ const RaceTrack = ({ players, playerCount, targetScore }: { players: PlayerState
   </div>
 );
 
-const PauseMenu = ({ t, onResume, onMainMenu }: { t: any, onResume: () => void, onMainMenu: () => void }) => (
+const PauseMenu = ({ t, language, onResume, onMainMenu }: { t: any, language: Language, onResume: () => void, onMainMenu: () => void }) => (
   <motion.div 
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     exit={{ opacity: 0 }}
-    className="fixed inset-0 z-[200] bg-indigo-950/80 backdrop-blur-xl flex flex-col items-center justify-center"
+    className="fixed inset-0 z-[200] bg-indigo-950/80 backdrop-blur-xl flex flex-col items-center justify-center p-6"
   >
       <h2 className="text-6xl font-black text-white mb-12 tracking-tighter uppercase">{t.gamePaused}</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-xl px-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-3xl">
           <button
               onClick={() => {
                 SoundService.playClick();
                 onResume();
               }}
-              className="bg-emerald-500 text-white p-8 rounded-[40px] font-black text-3xl shadow-2xl hover:scale-105 transition-all flex flex-col items-center gap-4 uppercase"
+              className="bg-emerald-500 text-white p-8 rounded-[40px] font-black text-3xl shadow-2xl hover:scale-105 transition-all flex flex-col items-center justify-center gap-4 uppercase"
           >
               <Play size={48} fill="currentColor" /> {t.resume}
           </button>
@@ -281,9 +283,25 @@ const PauseMenu = ({ t, onResume, onMainMenu }: { t: any, onResume: () => void, 
                 SoundService.playClick();
                 onMainMenu();
               }}
-              className="bg-rose-500 text-white p-8 rounded-[40px] font-black text-3xl shadow-2xl hover:scale-105 transition-all flex flex-col items-center gap-4 uppercase"
+              className="bg-rose-500 text-white p-8 rounded-[40px] font-black text-3xl shadow-2xl hover:scale-105 transition-all flex flex-col items-center justify-center gap-4 uppercase"
           >
               <Home size={48} /> {t.mainMenu}
+          </button>
+          <button
+              onClick={() => {
+                SoundService.playClick();
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen();
+                } else {
+                    document.exitFullscreen();
+                }
+              }}
+              className="bg-indigo-500 text-white p-8 rounded-[40px] font-black text-3xl shadow-2xl hover:scale-105 transition-all flex flex-col items-center justify-center gap-4 uppercase text-center"
+          >
+              {document.fullscreenElement ? <Minimize size={48} /> : <Maximize size={48} />}
+              <span className="text-lg">
+                {document.fullscreenElement ? translations[language].exitFullScreen : translations[language].fullScreen}
+              </span>
           </button>
       </div>
   </motion.div>
@@ -292,6 +310,29 @@ const PauseMenu = ({ t, onResume, onMainMenu }: { t: any, onResume: () => void, 
 export default function App() {
   const [language, setLanguage] = useState<Language>('en');
   const t = translations[language];
+
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch((e) => {
+        console.error(`Error attempting to enable full-screen mode: ${e.message} (${e.name})`);
+      });
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  };
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
 
   const [gameStatus, setGameStatus] = useState<'SETUP' | 'PLAYING' | 'PAUSED' | 'WINNER'>('SETUP');
   const [config, setConfig] = useState<GameConfig>({
@@ -463,23 +504,38 @@ export default function App() {
                     </div>
                 </div>
                 <div className="flex flex-col items-end gap-2">
-                    <div className="flex bg-indigo-50 p-1 rounded-2xl border-2 border-indigo-100">
-                        {(['en', 'es'] as const).map((lang) => (
-                            <button
-                                key={lang}
-                                onClick={() => {
-                                    SoundService.playClick();
-                                    setLanguage(lang);
-                                }}
-                                className={`px-4 py-2 rounded-xl font-black text-sm transition-all ${
-                                    language === lang
-                                        ? 'bg-indigo-600 text-white shadow-lg'
-                                        : 'text-indigo-400 hover:bg-indigo-100'
-                                }`}
-                            >
-                                {lang.toUpperCase()}
-                            </button>
-                        ))}
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => {
+                                SoundService.playClick();
+                                toggleFullscreen();
+                            }}
+                            className="p-3 bg-indigo-50 rounded-2xl border-2 border-indigo-100 text-indigo-600 hover:bg-indigo-100 transition-all flex items-center gap-2 group"
+                            title={isFullscreen ? t.exitFullScreen : t.fullScreen}
+                        >
+                            {isFullscreen ? <Minimize size={20} /> : <Maximize size={20} />}
+                            <span className="font-black text-xs hidden sm:inline uppercase">
+                                {isFullscreen ? t.exitFullScreen : t.fullScreen}
+                            </span>
+                        </button>
+                        <div className="flex bg-indigo-50 p-1 rounded-2xl border-2 border-indigo-100">
+                            {(['en', 'es'] as const).map((lang) => (
+                                <button
+                                    key={lang}
+                                    onClick={() => {
+                                        SoundService.playClick();
+                                        setLanguage(lang);
+                                    }}
+                                    className={`px-4 py-2 rounded-xl font-black text-sm transition-all ${
+                                        language === lang
+                                            ? 'bg-indigo-600 text-white shadow-lg'
+                                            : 'text-indigo-400 hover:bg-indigo-100'
+                                    }`}
+                                >
+                                    {lang.toUpperCase()}
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -757,6 +813,7 @@ export default function App() {
         {gameStatus === 'PAUSED' && (
           <PauseMenu 
             t={t}
+            language={language}
             onResume={() => setGameStatus('PLAYING')} 
             onMainMenu={() => setGameStatus('SETUP')} 
           />

@@ -34,6 +34,8 @@ export const translations = {
     victory: 'VICTORY!',
     steps: 'STEPS',
     home: 'HOME',
+    fullScreen: 'FULL SCREEN',
+    exitFullScreen: 'EXIT FULL SCREEN',
   },
   es: {
     title: 'CARRERA MATEMÁTICA',
@@ -67,5 +69,7 @@ export const translations = {
     victory: '¡VICTORIA!',
     steps: 'PASOS',
     home: 'INICIO',
+    fullScreen: 'PANTALLA COMPLETA',
+    exitFullScreen: 'SALIR DE PANTALLA COMPLETA',
   }
 };
